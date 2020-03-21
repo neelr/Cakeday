@@ -63,9 +63,9 @@ app.get('/birthday', (req, res) => {
 							if (bday.getDate() == date.getDate() && bday.getMonth() == date.getMonth()) {
 								slack(
 									process.env.CHANNEL,
-									'Happy CakeDay to <@' +
-										record.get('ID') +
-										'> and hope you have a wonderful day! :party_orpheus:'
+									`Happy CakeDay to <@${record.get(
+										'ID'
+									)}>! Have a wonderful day! :tada: :party_orpheus:`
 								);
 							}
 						}
