@@ -56,12 +56,7 @@ app.get('/birthday', (req, res) => {
 		base('CakeDay').select({ view: 'Grid view' }).eachPage((records, next) => {
 			records.forEach((record) => {
 				axios
-					.get(
-						'https://slack.com/api/users.profile.get?token=' +
-							process.env.OAUTH +
-							'&user=' +
-							record.get('ID')
-					)
+					.get(`https://slack.com/api/users.profile.get?token=${process.env.OAUTH}&user=${record.get('ID')}`)
 					.then((r) => {
 						if (r.data.profile.fields.BIRTHDAY_FIELD) {
 							var bday = new Date(r.data.profile.fields.BIRTHDAY_FIELD.value);
