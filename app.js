@@ -26,10 +26,8 @@ app.get('/slack', (req, res) => {
 	console.log(req.query);
 	axios
 		.get(
-			'https://slack.com/api/oauth.access?client_id=2210535565.860757160338&client_secret=' +
-				process.env.SECRET +
-				'&code=' +
-				req.query.code
+			`https://slack.com/api/oauth.acess?client_id=${SLACK_CLIENT_ID}&client_secret=${process.env
+				.SECRET}&code=${res.query.code}`
 		)
 		.then((r) => {
 			base('CakeDay').select({ view: 'Grid view' }).eachPage(
@@ -84,4 +82,5 @@ app.get('/birthday', (req, res) => {
 		res.sendStatus(401);
 	}
 });
+
 app.listen(3000, () => console.log('Cake Man on 3000'));
