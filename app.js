@@ -1,10 +1,12 @@
+//packages
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-var Airtable = require('airtable');
-var qs = require('querystring');
-var base = new Airtable({ apiKey: process.env.KEY }).base(process.env.BASE);
-var app = express();
+const Airtable = require('airtable');
+const qs = require('querystring');
+const base = new Airtable({ apiKey: process.env.KEY }).base(process.env.BASE);
+const app = express();
+
 app.use(express.static('./static/'));
 
 const BIRTHDAY_FIELD = 'XfQN2QL49W';
@@ -22,7 +24,7 @@ var slack = (user, text, ts) => {
 	});
 };
 app.get('/slack', (req, res) => {
-	var found = false;
+	let found = false;
 	console.log(req.query);
 	axios
 		.get(
@@ -59,16 +61,22 @@ app.get('/birthday', (req, res) => {
 			records.forEach((record) => {
 				axios
 					.get(`https://slack.com/api/users.profile.get?token=${process.env.OAUTH}&user=${record.get('ID')}`)
-					.then((r) => {
+					.then((r, record) => {
 						if (r.data.profile.fields.BIRTHDAY_FIELD) {
 							let bday = new Date(r.data.profile.fields.BIRTHDAY_FIELD.value);
-							if (bday.getDate() == date.getDate() && bday.getMonth() == date.getMonth()) {
+							s;
+							if (
+								bday.getDate() == date.getDate() &&
+								bday.getMonth() == date.getMonth() &&
+								record.get('lastSent') != date.getFullYear()
+							) {
 								slack(
 									process.env.CHANNEL,
 									`Happy CakeDay to <@${record.get(
 										'ID'
 									)}>! Have a wonderful day! :tada: :party_orpheus:`
 								);
+								base('CakeDay').update([ { fields: { lastSent: date.getFullYear() } } ]);
 							}
 						}
 					});
