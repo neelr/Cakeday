@@ -76,7 +76,14 @@ app.get('/birthday', (req, res) => {
 										'ID'
 									)}>! Have a wonderful day! :tada: :party_orpheus:`
 								);
-								base('CakeDay').update([ { fields: { lastSent: date.getFullYear() } } ]);
+								base('CakeDay').update([
+									{
+										id: record.getId(),
+										fields: {
+											lastSent: date.getFullYear()
+										}
+									}
+								]);
 							}
 						}
 					});
