@@ -49,8 +49,10 @@ app.get('/slack', (req, res) => {
 			res.redirect('/done.html');
 		});
 });
+
+//Express callback
 app.get('/birthday', (req, res) => {
-	var date = new Date();
+	let date = new Date();
 	if (req.query.key == process.env.TOKEN) {
 		res.sendStatus(200);
 		base('CakeDay').select({ view: 'Grid view' }).eachPage((records, next) => {
@@ -59,7 +61,7 @@ app.get('/birthday', (req, res) => {
 					.get(`https://slack.com/api/users.profile.get?token=${process.env.OAUTH}&user=${record.get('ID')}`)
 					.then((r) => {
 						if (r.data.profile.fields.BIRTHDAY_FIELD) {
-							var bday = new Date(r.data.profile.fields.BIRTHDAY_FIELD.value);
+							let bday = new Date(r.data.profile.fields.BIRTHDAY_FIELD.value);
 							if (bday.getDate() == date.getDate() && bday.getMonth() == date.getMonth()) {
 								slack(
 									process.env.CHANNEL,
